@@ -1,0 +1,32 @@
+{
+  "name": "mc-values",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "mc",
+    "values",
+    "protocol",
+    "Minecraft"
+  ],
+  "homepage": "https://github.com/jurian404/mcValues#readme",
+  "bugs": {
+    "url": "https://github.com/jurian404/mcValues/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jurian404/mcValues.git"
+  },
+  "license": "MIT",
+  "author": "Jurian.W",
+  "type": "commonjs",
+  "main": "main.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0"
+  }
+}
