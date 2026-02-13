@@ -1,44 +1,64 @@
-// const { readVarInt } = require('../lib/varLong');
-//
-// describe('readVarLong', () => {
-//     it('should read simple VarInts', () => {
-//         const buffer0 = Buffer.from([0x00]);
-//         const buffer1 = Buffer.from([0x01]);
-//         const buffer2 = Buffer.from([0xff, 0x02]);
-//         const buffer3 = Buffer.from([0x7f]);
-//         const buffer4 = Buffer.from([0x80, 0x01]);
-//         const buffer5 = Buffer.from([0xff, 0x01]);
-//         const buffer6 = Buffer.from([0xff, 0xff, 0x7f, 0xdd, 0xc7, 0x01]);
-//         const buffer7 = Buffer.from([0xff, 0xff, 0x7f]);
-//         const buffer8 = Buffer.from([0xff, 0xff, 0xff, 0xff, 0x07]);
-//         const buffer9 = Buffer.from([0xff, 0xff, 0xff, 0xff, 0x0f]);
-//         const buffer10 = Buffer.from([0x11, 0x80, 0x80, 0x80, 0x80, 0x08]);
-//
-//         const offset2 = 1;
-//         const offset6 = 3;
-//         const offset10 = 1;
-//
-//         expect(readVarInt(buffer0).value).toBe(0);
-//         expect(readVarInt(buffer1).value).toBe(1);
-//         expect(readVarInt(buffer2, offset2).value).toBe(2);
-//         expect(readVarInt(buffer3).value).toBe(127);
-//         expect(readVarInt(buffer4).value).toBe(128);
-//         expect(readVarInt(buffer5).value).toBe(255);
-//         expect(readVarInt(buffer6, offset6).value).toBe(25565);
-//         expect(readVarInt(buffer7).value).toBe(2097151);
-//         expect(readVarInt(buffer8).value).toBe(2147483647);
-//         expect(readVarInt(buffer9).value).toBe(-1);
-//         expect(readVarInt(buffer10, offset10).value).toBe(-2147483648);
-//     });
-//
-//     it('should throw if VarInt is out of range', () => {
-//         const buffer = Buffer.from([0x80, 0x80, 0x80, 0x80]);
-//         expect(() => readVarInt(buffer)).toThrow("Variable Integer wasn't correctly finished");
-//     });
-//
-//     if('should throw if VarInt is not correctly finished', () => {
-//         const buffer = Buffer.from([0x80, 0x80, 0x80, 0x80, 0x00]);
-//         expect(() => readVarInt(buffer)).toThrow("Variable Integer wasn't correctly finished");
-//     });
-//
-// });
+const { readVarLong } = require('../lib/varLong');
+
+describe('readVarLong', () => {
+    it('should read simple VarLongs', () => {
+        const tests = [
+            [Buffer.from([0x00]), 0n],
+            [Buffer.from([0x01]), 1n],
+            [Buffer.from([0x02, 0xff]), 2n],
+            [Buffer.from([0x7f]), 127n],
+            [Buffer.from([0x80, 0x01]), 128n],
+            [Buffer.from([0xff, 0x01]), 255n],
+            [Buffer.from([0xff, 0xff, 0xff, 0xff, 0x07]), 2147483647n],
+            [Buffer.from([0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x7f]), 9223372036854775807n],
+            [Buffer.from([0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01]), -1n],
+            [Buffer.from([0x80, 0x80, 0x80, 0x80, 0xf8, 0xff, 0xff, 0xff, 0xff, 0x01]), -2147483648n],
+            [Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x01]), -9223372036854775808n]
+        ]
+        for (const [buffer, expected] of tests) {
+            expect(readVarLong(buffer).value).toBe(expected);
+        }
+    });
+
+    it('should read VarLongs with offset', () => {
+        const tests = [
+            [Buffer.from([0x00, 0x00]), 1, 0n],
+            [Buffer.from([0x01, 0x01]), 1, 1n],
+            [Buffer.from([0xff, 0x3f, 0x63, 0x00, 0x7f]), 4, 127n],
+            [Buffer.from([0x80, 0xff, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01]), 1, 255n],
+            [Buffer.from([0xff, 0x23, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x01, 0xff, 0x23]), 2, -9223372036854775808n]
+        ]
+        for (const [buffer, offset, expected] of tests) {
+            expect(readVarLong(buffer, offset).value).toBe(expected);
+        }
+    });
+
+    it('should throw if VarLong is out of range', () => {
+        const tests = [
+            Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80]),
+            Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x03, 0x80]),
+            Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0xff]),
+        ]
+        for (const buffer of tests) {
+            expect(() => readVarLong(buffer)).toThrow("Variable Integer wasn't correctly finished. The last byte should be either 0x00 or 0x01");
+        }
+    });
+
+    it('should throw if ran out of the buffer', () => {
+        const tests = [
+            Buffer.from([]),
+            Buffer.from([0x80]),
+            Buffer.from([0x80, 0x80]),
+            Buffer.from([0x80, 0x80, 0x80]),
+            Buffer.from([0x80, 0x80, 0x80, 0x80]),
+            Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80]),
+            Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80]),
+            Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80]),
+            Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80]),
+            Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80])
+        ]
+        for (const buffer of tests) {
+            expect(() => readVarLong(buffer)).toThrow("Variable Integer ran out of range");
+        }
+    });
+});
