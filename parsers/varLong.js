@@ -1,23 +1,26 @@
 class VarLong {
+    #value;
+    #usedBytes;
+
     constructor(value, usedBytes) {
-        this.__value = value;
-        this.__usedBytes = usedBytes;
+        this.#value = value;
+        this.#usedBytes = usedBytes;
     }
 
     [Symbol.toPrimitive]() {
-        return this.__value;
+        return this.#value;
     }
 
     get value() {
-        return this.__value;
+        return this.#value;
     }
 
     get usedBytes() {
-        return this.__usedBytes;
+        return this.#usedBytes;
     }
 }
 
-function readVarLong(buffer, offset = 0) {
+function read(buffer, offset = 0) {
     const part = getParts(buffer, offset);
     const int = createIntegerFromParts(part);
     return new VarLong(int, part.length);
@@ -72,5 +75,5 @@ function createIntegerFromParts(object){
 }
 
 module.exports = {
-    readVarLong
+    read
 }

@@ -1,4 +1,4 @@
-const { readVarLong } = require('../lib/varLong');
+const { read } = require('../parsers/varLong');
 
 describe('readVarLong', () => {
     it('should read simple VarLongs', () => {
@@ -16,7 +16,7 @@ describe('readVarLong', () => {
             [Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x01]), -9223372036854775808n]
         ]
         for (const [buffer, expected] of tests) {
-            expect(readVarLong(buffer).value).toBe(expected);
+            expect(read(buffer).value).toBe(expected);
         }
     });
 
@@ -29,7 +29,7 @@ describe('readVarLong', () => {
             [Buffer.from([0xff, 0x23, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x01, 0xff, 0x23]), 2, -9223372036854775808n]
         ]
         for (const [buffer, offset, expected] of tests) {
-            expect(readVarLong(buffer, offset).value).toBe(expected);
+            expect(read(buffer, offset).value).toBe(expected);
         }
     });
 
@@ -40,7 +40,7 @@ describe('readVarLong', () => {
             Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0xff]),
         ]
         for (const buffer of tests) {
-            expect(() => readVarLong(buffer)).toThrow("Variable Integer wasn't correctly finished. The last byte should be either 0x00 or 0x01");
+            expect(() => read(buffer)).toThrow("Variable Integer wasn't correctly finished. The last byte should be either 0x00 or 0x01");
         }
     });
 
@@ -58,7 +58,7 @@ describe('readVarLong', () => {
             Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80])
         ]
         for (const buffer of tests) {
-            expect(() => readVarLong(buffer)).toThrow("Variable Integer ran out of range");
+            expect(() => read(buffer)).toThrow("Variable Integer ran out of range");
         }
     });
 });

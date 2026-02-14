@@ -1,5 +1,5 @@
 {
-  "name": "mc-values",
+  "name": "mcvalues",
   "version": "1.0.0",
   "description": "",
   "keywords": [
@@ -19,9 +19,9 @@
   "license": "MIT",
   "author": "Jurian.W",
   "type": "commonjs",
-  "main": "main.js",
+  "main": "index.js",
   "directories": {
-    "lib": "lib"
+    "lib": "parsers"
   },
   "scripts": {
     "test": "jest"

@@ -16,7 +16,7 @@ class McBoolean {
     }
 }
 
-function readBoolean(buffer, offset = 0) {
+function read(buffer, offset = 0) {
     if (buffer.length - 1 < offset) {
         throw new Error("Boolean ran out of range");
     }
@@ -26,11 +26,11 @@ function readBoolean(buffer, offset = 0) {
     } else if (byte === 0x01) {
         return new McBoolean(true);
     } else {
-        throw new Error("Invalid boolean value: " + byte);
+        throw new Error("Invalid boolean value: 0x" + byte.toString(16).padStart(2, "0"));
     }
 }
 
-function writeBoolean(value) {
+function write(value) {
     if (value) {
         return Buffer.from([0x01]);
     }
@@ -38,6 +38,5 @@ function writeBoolean(value) {
 }
 
 module.exports = {
-    readBoolean,
-    writeBoolean
+    read,
 }
