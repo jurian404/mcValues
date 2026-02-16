@@ -26,6 +26,34 @@ function read(buffer, offset = 0) {
     return new VarLong(int, part.length);
 }
 
+function write(value) {
+    if(value < -9223372036854775808n || value > 9223372036854775807n){
+        throw new Error("Value is out of range for VarLong: " + value);
+    }
+    const byteBlocks = [];
+    let isNegative = false;
+    if (value < 0n){
+        isNegative = true;
+        value = 9223372036854775808n + value;
+    }
+    do {
+        const part = Number(value & 0b1111111n);
+        byteBlocks.push(part);
+        value >>= 7n;
+    } while (value > 0n);
+    for (let i = 0; i < byteBlocks.length - 1; i++) {
+        byteBlocks[i] = byteBlocks[i] | 0b10000000;
+    }
+    if (isNegative) {
+        byteBlocks[byteBlocks.length - 1] = byteBlocks[byteBlocks.length - 1] | 0b10000000;
+        while (byteBlocks.length < 9){
+            byteBlocks.push(0x80);
+        }
+        byteBlocks.push(0x01);
+    }
+    return Buffer.from(byteBlocks);
+}
+
 function getParts(buffer, offset){
     const bufferLength = buffer.length;
     const byteBlocks = [];
@@ -75,5 +103,6 @@ function createIntegerFromParts(object){
 }
 
 module.exports = {
-    read
+    read,
+    write
 }

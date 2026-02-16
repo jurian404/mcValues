@@ -1,4 +1,5 @@
-const {read} = require('../parsers/boolean');
+const mcValue = require("../index");
+
 
 describe('read boolean', () => {
 
@@ -9,7 +10,7 @@ describe('read boolean', () => {
         ]
 
         for (const [buffer, expected] of tests) {
-            expect(read(buffer).value).toBe(expected);
+            expect(mcValue.boolean.read(buffer).value).toBe(expected);
         }
     });
 
@@ -20,7 +21,7 @@ describe('read boolean', () => {
         ]
 
         for (const [buffer, offset, expected] of tests) {
-            expect(read(buffer, offset).value).toBe(expected);
+            expect(mcValue.boolean.read(buffer, offset).value).toBe(expected);
         }
     });
 
@@ -32,7 +33,7 @@ describe('read boolean', () => {
         ]
 
         for (const [buffer, offset] of tests) {
-            expect(() => read(buffer, offset)).toThrow("Boolean ran out of range");
+            expect(() => mcValue.boolean.read(buffer, offset)).toThrow("Boolean ran out of range");
         }
     });
 
@@ -43,7 +44,20 @@ describe('read boolean', () => {
         ]
 
         for (const buffer of tests) {
-            expect(() => read(buffer)).toThrow("Invalid boolean value: 0x" + buffer[0].toString(16).padStart(2, "0"));
+            expect(() => mcValue.boolean.read(buffer)).toThrow("Invalid boolean value: 0x" + buffer[0].toString(16).padStart(2, "0"));
+        }
+    });
+
+    it('should write boolean to buffer', () => {
+        const tests = [
+            [true, Buffer.from([0x01])],
+            [false, Buffer.from([0x00])],
+            [1, Buffer.from([0x01])],
+            [0, Buffer.from([0x00])],
+            ["string", Buffer.from([0x01])]
+        ]
+        for (const [value, expected] of tests) {
+            expect(mcValue.boolean.write(value)).toStrictEqual(expected);
         }
     });
 });

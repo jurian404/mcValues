@@ -39,4 +39,5 @@ function write(value) {
 
 module.exports = {
     read,
+    write
 }
