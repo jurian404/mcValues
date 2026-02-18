@@ -11,10 +11,10 @@ npm install mcvalues
 
 ## Supported Data Types
 The module currently supports the following Minecraft data types:
+- [Boolean](#boolean)
+- [Byte](#byte)
 - [VarInt](#varint)
 - [VarLong](#varlong)
-- [Boolean](#boolean)
-
 More data types will be added in the future, so stay tuned for updates!
 
 
@@ -87,6 +87,32 @@ The length of the buffer will depend on the value being converted and the data t
 
 ## Data Types
 
+### Boolean
+
+A simple true/false value.
+
+#### Parsing:
+Will return a `Boolean` object with the following properties:
+* **value:** JavaScript boolean
+* **usedBytes:** always 1
+
+#### Writing:
+* **Input:** JavaScript boolean
+* **Output:** Buffer with a length of 1 byte
+---
+
+### Byte
+
+A single byte that represents a signed integer value between -128 and 127.
+Length: 1 byte
+
+#### Parsing:
+Will return a `Byte` object with the following properties:
+* **value:** JavaScript number
+* **usedBytes:** always 1
+
+---
+
 ### VarInt
 A variable-length integer that represents an integer value in a compact form.
 Length: 1–5 bytes
@@ -99,6 +125,8 @@ Will return a `VarInt` object with the following properties:
 #### Writing:
 * **Input:** JavaScript number
 * **Output:** Buffer with a length between 1 and 5 bytes
+
+---
 
 ### VarLong
 
@@ -113,19 +141,6 @@ Will return a `VarLong` object with the following properties:
 #### Writing:
 * **Input:** JavaScript bigint
 * **Output:** Buffer with a length between 1 and 10 bytes
-
-### Boolean
-
-A simple true/false value.
-
-#### Parsing:
-Will return a `Boolean` object with the following properties:
-* **value:** JavaScript boolean
-* **usedBytes:** always 1
-
-#### Writing:
-* **Input:** JavaScript boolean
-* **Output:** Buffer with a length of 1 byte
 
 ## Disclaimer
 
