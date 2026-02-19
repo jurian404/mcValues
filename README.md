@@ -111,6 +111,56 @@ Will return a `Byte` object with the following properties:
 * **value:** JavaScript number
 * **usedBytes:** always 1
 
+#### Writing:
+* **Input:** JavaScript number
+* **Output:** Buffer with a length of 1 byte
+
+---
+
+### Short
+
+A two-byte signed integer value between -32.768 and 32.767.
+Length: 2 bytes
+
+#### Parsing:
+Will return a `Short` object with the following properties:
+* **value:** JavaScript number
+* **usedBytes:** always 2
+
+#### Writing:
+* **Input:** JavaScript number
+* **Output:** Buffer with a length of 2 bytes
+
+---
+
+### Int
+A four-byte signed integer value between -2.147.483.648 and 2.147.483.647.
+Length: 4 bytes
+
+#### Parsing:
+Will return an `Int` object with the following properties:
+* **value:** JavaScript number
+* **usedBytes:** always 4
+
+#### Writing:
+* **Input:** JavaScript number
+* **Output:** Buffer with a length of 4 bytes
+
+---
+
+### Long
+An eight-byte signed integer value between -9.223.372.036.854.775808 and 9.223.372.036.854.775807.
+Length: 8 bytes
+
+#### Parsing:
+Will return a `Long` object with the following properties:
+* **value:** JavaScript bigint
+* **usedBytes:** always 8
+
+#### Writing:
+* **Input:** JavaScript bigint
+* **Output:** Buffer with a length of 8 bytes
+
 ---
 
 ### VarInt

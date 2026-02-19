@@ -1,7 +1,6 @@
-const int = require('./subParser/numbers');
+const int = require('./subParser/bigInt');
 
-
-class Byte {
+class Long {
     #value;
 
     constructor(value) {
@@ -17,16 +16,16 @@ class Byte {
     }
 
     get usedBytes() {
-        return 1;
+        return 8;
     }
 }
 
 function read(buffer, offset = 0){
-    return new Byte(int.read(buffer, 1, offset));
+    return new Long(int.read(buffer, 8, offset));
 }
 
 function write(value) {
-    return int.write(value, 1);
+    return int.write(value, 8);
 }
 
 module.exports = {

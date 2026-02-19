@@ -6,7 +6,10 @@
     "mc",
     "values",
     "protocol",
-    "Minecraft"
+    "Minecraft",
+    "Varint",
+    "Varlong",
+    "Boolean"
   ],
   "homepage": "https://github.com/jurian404/mcValues#readme",
   "bugs": {

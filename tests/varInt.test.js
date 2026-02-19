@@ -54,18 +54,6 @@ describe("varInt", () => {
         }
     });
 
-    it("throws when out of range", () => {
-        const tests = [
-            Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80]),
-            Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80]),
-            Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80])
-        ];
-
-        for (const buffer of tests) {
-            expect(() => mcValue.varInt.read(buffer)).toThrow("Variable Integer wasn't correctly finished. Is it maybe a VarLong?");
-        }
-    });
-
     it("throws when buffer is too short", () => {
         const tests = [
             Buffer.from([]),
@@ -77,6 +65,18 @@ describe("varInt", () => {
 
         for (const buffer of tests) {
             expect(() => mcValue.varInt.read(buffer)).toThrow("Variable Integer ran out of the buffer");
+        }
+    });
+
+    it("throws when out of range", () => {
+        const tests = [
+            Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80]),
+            Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80]),
+            Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80])
+        ];
+
+        for (const buffer of tests) {
+            expect(() => mcValue.varInt.read(buffer)).toThrow("Variable Integer wasn't correctly finished. Is it maybe a VarLong?");
         }
     });
 

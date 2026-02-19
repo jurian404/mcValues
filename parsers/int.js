@@ -1,41 +1,34 @@
-function read(buffer, length, offset){
-    if (buffer.length < length + offset){
-        throw new Error("Ran out of buffer");
+const int = require('./subParser/numbers');
+
+class Int {
+    #value;
+
+    constructor(value) {
+        this.#value = value;
     }
-    let number = 0;
-    for (let i = 0; i < length; i++) {
-        number <<= 8;
-        number |= buffer[offset + i];
+
+    [Symbol.toPrimitive]() {
+        return this.#value;
     }
-    //check negative
-    if (number >> (8 * length - 1)){
-        number ^= 0b1 << (8 * length - 1);
-        number = -(2 **(8 * length -1)) + number;
+
+    get value() {
+        return this.#value;
     }
-    return number;
+
+    get usedBytes() {
+        return 4;
+    }
 }
 
-function write(number, length) {
-    if(number < -(2 ** (8 * length -1)) || number > 2 ** (8 * length -1) - 1){
-        throw new Error("Value is out of range for VarLong: " + number);
-    }
-    let isNegative = false;
-    const blocks = []
-    if (number < 0) {
-        isNegative = true;
-        number =  2 ** (8 * length -1) + number;
-    }
-    for (let i = length - 1; i >= 0; i--) {
-        const block = number & 0xff << (8 * i);
-        blocks.push(block);
-    }
-    if (isNegative) {
-        blocks[blocks.length - 1] = blocks[blocks.length - 1] | 0x80;
-    }
-    return Buffer.from(blocks);
+function read(buffer, offset = 0){
+    return new Int(int.read(buffer, 4, offset));
+}
+
+function write(value) {
+    return int.write(value, 4);
 }
 
 module.exports = {
     read,
-    write,
+    write
 }
