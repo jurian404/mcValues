@@ -11,8 +11,11 @@ npm install mcvalues
 
 ## Supported Data Types
 The module currently supports the following Minecraft data types:
-- [Boolean](#boolean)
 - [Byte](#byte)
+- [Boolean](#boolean)
+- [Short](#short)
+- [Int](#int)
+- [Long](#long)
 - [VarInt](#varint)
 - [VarLong](#varlong)
 More data types will be added in the future, so stay tuned for updates!
