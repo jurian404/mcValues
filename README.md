@@ -23,7 +23,6 @@ The module currently supports the following Minecraft data types:
 
 > More data types will be added in the future, so stay tuned for updates!
 
-
 ## Usage
 
 ### Basic Syntax
