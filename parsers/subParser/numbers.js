@@ -17,7 +17,7 @@ function read(buffer, length, offset){
 
 function write(number, length) {
     if(number < -(2 ** (8 * length -1)) || number > 2 ** (8 * length -1) - 1){
-        throw new Error("Value is out of range for VarLong: " + number);
+        throw new Error("Value is out of range: " + number);
     }
     let isNegative = false;
     const blocks = []
@@ -35,7 +35,33 @@ function write(number, length) {
     return Buffer.from(blocks);
 }
 
+function unsignedRead(buffer, length, offset){
+    if (buffer.length < length + offset){
+        throw new Error("Ran out of buffer");
+    }
+    let number = 0;
+    for (let i = 0; i < length; i++) {
+        number <<= 8;
+        number |= buffer[offset + i];
+    }
+    return number;
+}
+
+function unsignedWrite(number, length) {
+    if(number > 2 ** (8 * length) - 1 || number < 0){
+        throw new Error("Value is out of range: " + number);
+    }
+    const blocks = [];
+    for (let i = length - 1; i >= 0; i--) {
+        const block = (number >> (8 * i)) & 0xff;
+        blocks.push(block);
+    }
+    return Buffer.from(blocks);
+}
+
 module.exports = {
     read,
     write,
+    unsignedRead,
+    unsignedWrite
 }

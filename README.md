@@ -11,14 +11,17 @@ npm install mcvalues
 
 ## Supported Data Types
 The module currently supports the following Minecraft data types:
-- [Byte](#byte)
 - [Boolean](#boolean)
+- [Byte](#byte)
+- [Unsigned Byte](#unsigned-byte)
 - [Short](#short)
+- [Unsigned Short](#unsigned-short)
 - [Int](#int)
 - [Long](#long)
 - [VarInt](#varint)
 - [VarLong](#varlong)
-More data types will be added in the future, so stay tuned for updates!
+
+> More data types will be added in the future, so stay tuned for updates!
 
 
 ## Usage
@@ -102,6 +105,7 @@ Will return a `Boolean` object with the following properties:
 #### Writing:
 * **Input:** JavaScript boolean
 * **Output:** Buffer with a length of 1 byte
+
 ---
 
 ### Byte
@@ -120,6 +124,21 @@ Will return a `Byte` object with the following properties:
 
 ---
 
+### Unsigned Byte
+A single byte that represents an unsigned integer value between 0 and 255.
+Length: 1 byte
+
+#### Parsing:
+Will return an `UnsignedByte` object with the following properties:
+* **value:** JavaScript number
+* **usedBytes:** always 1
+
+#### Writing:
+* **Input:** JavaScript number
+* **Output:** Buffer with a length of 1 byte
+
+---
+
 ### Short
 
 A two-byte signed integer value between -32.768 and 32.767.
@@ -127,6 +146,21 @@ Length: 2 bytes
 
 #### Parsing:
 Will return a `Short` object with the following properties:
+* **value:** JavaScript number
+* **usedBytes:** always 2
+
+#### Writing:
+* **Input:** JavaScript number
+* **Output:** Buffer with a length of 2 bytes
+
+---
+
+### Unsigned Short
+A two-byte unsigned integer value between 0 and 65.535.
+Length: 2 bytes
+
+#### Parsing:
+Will return an `UnsignedShort` object with the following properties:
 * **value:** JavaScript number
 * **usedBytes:** always 2
 

@@ -37,6 +37,12 @@ describe("int", () => {
         }
     });
 
+    it("read usedBytes", () => {
+        for (const part of readExamples) {
+            expect(mcValue.int.read(part[0]).usedBytes).toBe(4);
+        }
+    });
+
     it("reads values with remaining bytes", () => {
         for (const [buffer, expected] of readExamplesWithRemainingBytes) {
             expect(mcValue.int.read(buffer).value).toBe(expected);
@@ -51,7 +57,7 @@ describe("int", () => {
 
     it("throws when buffer is too short", () => {
         for (const buffer of shortBufferExamples) {
-            expect(() => mcValue.int.read(buffer)).toThrow();
+            expect(() => mcValue.int.read(buffer)).toThrow("Ran out of buffer");
         }
     });
 
@@ -63,7 +69,7 @@ describe("int", () => {
 
     it("throws when value is out of range", () => {
         for (const number of writeOutOfRangeExamples) {
-            expect(() => mcValue.int.write(number)).toThrow();
+            expect(() => mcValue.int.write(number)).toThrow("Value is out of range: " + number);
         }
     });
 });

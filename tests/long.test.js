@@ -37,6 +37,12 @@ describe("long", () => {
         }
     });
 
+    it("read usedBytes", () => {
+        for (const part of readExamples) {
+            expect(mcValue.long.read(part[0]).usedBytes).toBe(8);
+        }
+    });
+
     it("reads values with remaining bytes", () => {
         for (const [buffer, expected] of readExamplesWithRemainingBytes) {
             expect(mcValue.long.read(buffer).value).toBe(expected);
@@ -51,7 +57,7 @@ describe("long", () => {
 
     it("throws when buffer is too short", () => {
         for (const buffer of shortBufferExamples) {
-            expect(() => mcValue.long.read(buffer)).toThrow();
+            expect(() => mcValue.long.read(buffer)).toThrow("Ran out of buffer");
         }
     });
 
@@ -63,7 +69,7 @@ describe("long", () => {
 
     it("throws when value is out of range", () => {
         for (const number of writeOutOfRangeExamples) {
-            expect(() => mcValue.long.write(number)).toThrow();
+            expect(() => mcValue.long.write(number)).toThrow("Value is out of range: " + number);
         }
     });
 });

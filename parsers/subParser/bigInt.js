@@ -17,7 +17,7 @@ function read(buffer, length, offset){
 
 function write(number, length) {
     if(number < -(2n ** BigInt(8 * length -1)) || number > 2n ** BigInt(8 * length -1) - 1n){
-        throw new Error("Value is out of range for VarLong: " + number);
+        throw new Error("Value is out of range: " + number);
     }
     let isNegative = false;
     const blocks = []

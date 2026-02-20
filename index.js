@@ -5,8 +5,8 @@ const int = require('./parsers/int');
 const long = require('./parsers/long');
 const varInt = require('./parsers/varInt');
 const varLong = require('./parsers/varLong');
-
-
+const unsignedByte = require('./parsers/unsignedByte');
+const unsignedShort = require('./parsers/unsignedShort');
 
 module.exports = {
     boolean,
@@ -15,5 +15,7 @@ module.exports = {
     int,
     long,
     varInt,
-    varLong
+    varLong,
+    unsignedByte,
+    unsignedShort
 }
