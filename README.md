@@ -12,6 +12,7 @@ npm install mcvalues
 ## Supported Data Types
 The module currently supports the following Minecraft data types:
 - [Boolean](#boolean)
+- [String](#string)
 - [Byte](#byte)
 - [Unsigned Byte](#unsigned-byte)
 - [Short](#short)
@@ -104,6 +105,21 @@ Will return a `Boolean` object with the following properties:
 #### Writing:
 * **Input:** JavaScript boolean
 * **Output:** Buffer with a length of 1 byte
+
+---
+
+### String
+A string of characters that represents text data.
+Length: Depends on the length of the string and the encoding used.
+
+#### Parsing:
+Will return a `McString` object with the following properties:
+* **value:** JavaScript string
+* **usedBytes:** number of bytes used to represent the string in the buffer
+
+#### Writing:
+* **Input:** JavaScript string
+* **Output:** Buffer containing the bytes that represent the string in the Minecraft data format
 
 ---
 
@@ -231,3 +247,5 @@ Will return a `VarLong` object with the following properties:
 ## Disclaimer
 
 This project is not affiliated with, endorsed by, or associated with Mojang Studios or Microsoft. Minecraft is a trademark of Mojang Studios. All related assets, names, and references belong to their respective owners.
+
+> If you have any questions, suggestions, or want to contribute to the project, feel free to open an issue or submit a pull request on GitHub. Your feedback is greatly appreciated!

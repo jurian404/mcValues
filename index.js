@@ -7,6 +7,7 @@ const varInt = require('./parsers/varInt');
 const varLong = require('./parsers/varLong');
 const unsignedByte = require('./parsers/unsignedByte');
 const unsignedShort = require('./parsers/unsignedShort');
+const string = require('./parsers/string');
 
 module.exports = {
     boolean,
@@ -17,5 +18,6 @@ module.exports = {
     varInt,
     varLong,
     unsignedByte,
-    unsignedShort
+    unsignedShort,
+    string
 }
