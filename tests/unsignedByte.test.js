@@ -20,6 +20,15 @@ describe("unsignedByte", () => {
         [Buffer.from([0xff, 0x00, 0x7f]), 2, 127]
     ];
 
+    const readExamplesWithNegativeOffset = [
+        [Buffer.from([0x00, 0x7f]), -1, 127],
+        [Buffer.from([0x00, 0x01, 0xff]), -1, 255],
+        [Buffer.from([0xff, 0x00, 0x80]), -1, 128],
+        [Buffer.from([0x01, 0x02, 0x03, 0x7f]), -1, 127],
+        [Buffer.from([0x00, 0x01, 0x80]), -2, 1],
+        [Buffer.from([0xff, 0xaa, 0xbb, 0xcc]), -3, 170]
+    ];
+
     const shortBufferExamples = [
         Buffer.from([])
     ];
@@ -51,6 +60,12 @@ describe("unsignedByte", () => {
 
     it("reads values with offset", () => {
         for (const [buffer, offset, expected] of readExamplesWithOffset) {
+            expect(mcValue.unsignedByte.read(buffer, offset).value).toBe(expected);
+        }
+    });
+
+    it("reads values with negative offset", () => {
+        for (const [buffer, offset, expected] of readExamplesWithNegativeOffset) {
             expect(mcValue.unsignedByte.read(buffer, offset).value).toBe(expected);
         }
     });

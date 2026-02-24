@@ -1,22 +1,14 @@
-class McBoolean {
+const calcOffset = require("../utils/offset");
+const McValue = require("./mcValue");
+
+class McBoolean extends McValue {
     constructor(value) {
-        this.__value = value;
-    }
-
-    get value() {
-        return this.__value;
-    }
-
-    [Symbol.toPrimitive]() {
-        return this.__value;
-    }
-
-    get usedBytes() {
-        return 1;
+        super(value, 1);
     }
 }
 
 function read(buffer, offset = 0) {
+    offset = calcOffset(offset, buffer.length);
     if (buffer.length - 1 < offset) {
         throw new Error("Boolean ran out of range");
     }

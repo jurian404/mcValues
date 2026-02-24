@@ -1,22 +1,9 @@
 const int = require('./subParser/numbers');
+const McValue = require("./mcValue");
 
-class UnsignedByte {
-    #value;
-
+class UnsignedByte extends McValue {
     constructor(value) {
-        this.#value = value;
-    }
-
-    [Symbol.toPrimitive]() {
-        return this.#value;
-    }
-
-    get value() {
-        return this.#value;
-    }
-
-    get usedBytes() {
-        return 1;
+        super(value, 1);
     }
 }
 

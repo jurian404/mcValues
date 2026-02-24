@@ -9,7 +9,12 @@
     "Minecraft",
     "Varint",
     "Varlong",
-    "Boolean"
+    "Boolean",
+    "Byte",
+    "Short",
+    "Int",
+    "Long",
+    "String"
   ],
   "homepage": "https://github.com/jurian404/mcValues#readme",
   "bugs": {

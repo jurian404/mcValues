@@ -1,26 +1,14 @@
-class VarInt {
-    #value;
-    #usedBytes;
+const calcOffset = require("../utils/offset");
+const McValue = require("./mcValue");
 
+class VarInt extends McValue {
     constructor(value, usedBytes) {
-        this.#value = value;
-        this.#usedBytes = usedBytes;
-    }
-
-    [Symbol.toPrimitive]() {
-        return this.#value;
-    }
-
-    get value() {
-        return this.#value;
-    }
-
-    get usedBytes() {
-        return this.#usedBytes;
+        super(value, usedBytes);
     }
 }
 
 function read(buffer, offset = 0) {
+    offset = calcOffset(offset, buffer.length);
     const part = getParts(buffer, offset);
     const int = createIntegerFromParts(part);
     return new VarInt(int, part.length);

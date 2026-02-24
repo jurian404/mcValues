@@ -54,10 +54,14 @@ const varIntValue = mcValues.varInt.read(buffer, 1); // Start reading from the s
 
 #### Output
 
-The `read` method will return an Object containing the parsed value and the number of bytes read from the buffer.
-All the values in the objects are read-only, so you cannot modify them directly.
-What datatype will be returned depends on the data type you selected to parse. To check this, read the documentation of the specific data type further down in this README.
+The `read` method will return an Object that is a child of the `McValue` class, which contains the following read-only properties:
+* **value:** The JavaScript value that was parsed from the buffer.
+* **usedBytes:** The number of bytes that were read from the buffer to parse the value.
 
+Depending on the data type being parsed, the `value` property will be of a different JavaScript type (e.g., boolean, number, bigint, string).
+Which type is returned will be specified in the documentation for each data type below.
+Every Object can have additional methods and properties that are specific to the data type being parsed.
+If there are any additional methods or properties, they will also be documented in the section for that data type.
 
 Example:
 ```javascript

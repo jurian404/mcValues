@@ -29,6 +29,20 @@ describe("varLong", () => {
         [Buffer.from([0xff, 0x23, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x01, 0xff, 0x23]), 2, -9223372036854775808n]
     ];
 
+    const readExamplesWithNegativeOffset = [
+        [Buffer.from([0x00, 0xff]), -2, 0n],
+        [Buffer.from([0xff, 0x01]), -1, 1n],
+        [Buffer.from([0x01, 0x02, 0xff, 0xdd]), -3, 2n],
+        [Buffer.from([0x7f]), -1, 127n],
+        [Buffer.from([0x80, 0x01]), -2, 128n],
+        [Buffer.from([0x00, 0xff, 0x01, 0xff]), -3, 255n],
+        [Buffer.from([0xdd, 0xff, 0xff, 0xff, 0xff, 0x07]), -5, 2147483647n],
+        [Buffer.from([0xa5, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x7f]), -9, 9223372036854775807n],
+        [Buffer.from([0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01, 0x45]), -11, -1n],
+        [Buffer.from([0x00, 0x80, 0x80, 0x80, 0x80, 0xf8, 0xff, 0xff, 0xff, 0xff, 0x01, 0xa2, 0xf1]), -12, -2147483648n],
+        [Buffer.from([0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x01]), -10, -9223372036854775808n]
+    ];
+
     it("reads values", () => {
         for (const [buffer, expected] of readExamples) {
             expect(mcValue.varLong.read(buffer).value).toBe(expected);
@@ -43,6 +57,12 @@ describe("varLong", () => {
 
     it("reads values with offset", () => {
         for (const [buffer, offset, expected] of readExamplesWithOffset) {
+            expect(mcValue.varLong.read(buffer, offset).value).toBe(expected);
+        }
+    });
+
+    it("reads values with negative offset", () => {
+        for (const [buffer, offset, expected] of readExamplesWithNegativeOffset) {
             expect(mcValue.varLong.read(buffer, offset).value).toBe(expected);
         }
     });

@@ -17,6 +17,13 @@ describe("boolean", () => {
         [Buffer.from([0xf1, 0x01, 0x00]), 2, false]
     ];
 
+    const readExamplesWithNegativeOffset = [
+        [Buffer.from([0xaa, 0x01]), -1, true],
+        [Buffer.from([0xbb, 0xcc, 0x00]), -1, false],
+        [Buffer.from([0xff, 0x01, 0x00]), -2, true],
+        [Buffer.from([0x00, 0x00, 0x01, 0xff]), -3, false]
+    ];
+
     const shortBufferExamples = [
         [Buffer.from([]), 0],
         [Buffer.from([0x00]), 1],
@@ -50,6 +57,12 @@ describe("boolean", () => {
 
     it("reads values with offset", () => {
         for (const [buffer, offset, expected] of readExamplesWithOffset) {
+            expect(mcValue.boolean.read(buffer, offset).value).toBe(expected);
+        }
+    });
+
+    it("reads values with negative offset", () => {
+        for (const [buffer, offset, expected] of readExamplesWithNegativeOffset) {
             expect(mcValue.boolean.read(buffer, offset).value).toBe(expected);
         }
     });

@@ -1,22 +1,9 @@
 const int = require('./subParser/bigInt');
+const McValue = require("./mcValue");
 
-class Long {
-    #value;
-
+class Long extends McValue {
     constructor(value) {
-        this.#value = value;
-    }
-
-    [Symbol.toPrimitive]() {
-        return this.#value;
-    }
-
-    get value() {
-        return this.#value;
-    }
-
-    get usedBytes() {
-        return 8;
+        super(value, 8);
     }
 }
 

@@ -20,6 +20,13 @@ describe("int", () => {
         [Buffer.from([0xff, 0x00, 0x7f, 0xff, 0xff, 0xff]), 2, 2147483647]
     ];
 
+    const readExamplesWithNegativeOffset = [
+        [Buffer.from([0xff, 0x00, 0x00, 0x00, 0x00, 0x22]), -5, 0],
+        [Buffer.from([0xdd, 0x00, 0x00, 0x00, 0x00, 0x01, 0xff, 0xda]), -6, 1],
+        [Buffer.from([0xff, 0x7f, 0xff, 0xff, 0xff, 0xad]), -5, 2147483647],
+        [Buffer.from([0x00, 0x89, 0x80, 0x00, 0x00, 0x00, 0xfa]), -5, -2147483648],
+    ];
+
     const shortBufferExamples = [
         Buffer.from([]),
         Buffer.from([0x00]),
@@ -51,6 +58,12 @@ describe("int", () => {
 
     it("reads values with offset", () => {
         for (const [buffer, offset, expected] of readExamplesWithOffset) {
+            expect(mcValue.int.read(buffer, offset).value).toBe(expected);
+        }
+    });
+
+    it("reads values with negative offset", () => {
+        for (const [buffer, offset, expected] of readExamplesWithNegativeOffset) {
             expect(mcValue.int.read(buffer, offset).value).toBe(expected);
         }
     });

@@ -1,4 +1,7 @@
+const calcOffset = require("../../utils/offset");
+
 function read(buffer, length, offset){
+    offset = calcOffset(offset, buffer.length);
     if (buffer.length < length + offset){
         throw new Error("Ran out of buffer");
     }
@@ -36,6 +39,7 @@ function write(number, length) {
 }
 
 function unsignedRead(buffer, length, offset){
+    offset = calcOffset(offset, buffer.length);
     if (buffer.length < length + offset){
         throw new Error("Ran out of buffer");
     }
