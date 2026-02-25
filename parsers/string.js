@@ -1,5 +1,5 @@
 const calcOffset = require("../utils/offset");
-const McValue = require("./mcValue");
+const McValue = require("../utils/mcValue");
 const varInt = require('./varInt');
 
 class McString extends McValue {
@@ -14,7 +14,7 @@ function read(buffer, offset = 0) {
     try {
         length = varInt.read(buffer, offset);
 
-    } catch (error){
+    } catch (error) {
         switch (error.message) {
             case "Variable Integer ran out of the buffer":
                 throw new Error('String ran out of the buffer');

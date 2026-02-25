@@ -3,11 +3,11 @@ const mcValue = require("../index");
 describe("string", () => {
 
     const readExamples = [
-        [Buffer.from([0x00]), ""],
-        [Buffer.from([0x01, 0x61]), "a"],
-        [Buffer.from([0x05, 0x48, 0x65, 0x6c, 0x6c, 0x6f]), "Hello"],
-        [Buffer.from([0x0c, ...Buffer.from("Hello World!")]), "Hello World!"],
-        [Buffer.from([0x02, 0xc3, 0xa4]), "ä"]
+        [Buffer.from([0x00]), "", 1],
+        [Buffer.from([0x01, 0x61]), "a", 2],
+        [Buffer.from([0x05, 0x48, 0x65, 0x6c, 0x6c, 0x6f]), "Hello", 6],
+        [Buffer.from([0x0c, ...Buffer.from("Hello World!")]), "Hello World!", 13],
+        [Buffer.from([0x02, 0xc3, 0xa4]), "ä", 3]
     ];
 
     const readExamplesWithRemainingBytes = [
@@ -55,8 +55,14 @@ describe("string", () => {
     ];
 
     it("reads values", () => {
-        for (const [buffer, expected] of readExamples) {
+        for (const [buffer, expected, used] of readExamples) {
             expect(mcValue.string.read(buffer).value).toBe(expected);
+        }
+    });
+
+    it("read usedBytes", () => {
+        for (const [buffer, expected, used] of readExamples) {
+            expect(mcValue.string.read(buffer).usedBytes).toBe(used);
         }
     });
 

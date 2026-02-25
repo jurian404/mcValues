@@ -1,5 +1,5 @@
 const int = require('./subParser/bigInt');
-const McValue = require("./mcValue");
+const McValue = require("../utils/mcValue");
 
 class Long extends McValue {
     constructor(value) {

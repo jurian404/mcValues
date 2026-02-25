@@ -1,5 +1,5 @@
 const calcOffset = require("../utils/offset");
-const McValue = require("./mcValue");
+const McValue = require("../utils/mcValue");
 
 class VarInt extends McValue {
     constructor(value, usedBytes) {

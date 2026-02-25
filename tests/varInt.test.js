@@ -2,17 +2,17 @@ const mcValue = require("../index");
 
 describe("varInt", () => {
     const readExamples = [
-        [Buffer.from([0x00]), 0],
-        [Buffer.from([0x01]), 1],
-        [Buffer.from([0x02]), 2],
-        [Buffer.from([0x7f]), 127],
-        [Buffer.from([0x80, 0x01]), 128],
-        [Buffer.from([0xff, 0x01]), 255],
-        [Buffer.from([0xdd, 0xc7, 0x01]), 25565],
-        [Buffer.from([0xff, 0xff, 0x7f]), 2097151],
-        [Buffer.from([0xff, 0xff, 0xff, 0xff, 0x07]), 2147483647],
-        [Buffer.from([0xff, 0xff, 0xff, 0xff, 0x0f]), -1],
-        [Buffer.from([0x80, 0x80, 0x80, 0x80, 0x08]), -2147483648]
+        [Buffer.from([0x00]), 0, 1],
+        [Buffer.from([0x01]), 1, 1],
+        [Buffer.from([0x02]), 2, 1],
+        [Buffer.from([0x7f]), 127, 1],
+        [Buffer.from([0x80, 0x01]), 128, 2],
+        [Buffer.from([0xff, 0x01]), 255, 2],
+        [Buffer.from([0xdd, 0xc7, 0x01]), 25565, 3],
+        [Buffer.from([0xff, 0xff, 0x7f]), 2097151, 3],
+        [Buffer.from([0xff, 0xff, 0xff, 0xff, 0x07]), 2147483647, 5],
+        [Buffer.from([0xff, 0xff, 0xff, 0xff, 0x0f]), -1, 5],
+        [Buffer.from([0x80, 0x80, 0x80, 0x80, 0x08]), -2147483648, 5]
     ];
 
     const readExamplesWithRemainingBytes = [
@@ -47,8 +47,14 @@ describe("varInt", () => {
     ];
 
     it("reads values", () => {
-        for (const [buffer, expected] of readExamples) {
+        for (const [buffer, expected, used] of readExamples) {
             expect(mcValue.varInt.read(buffer).value).toBe(expected);
+        }
+    });
+
+    it("read usedBytes", () => {
+        for (const [buffer, expected, used] of readExamples) {
+            expect(mcValue.varInt.read(buffer).usedBytes).toBe(used);
         }
     });
 

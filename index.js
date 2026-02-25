@@ -8,6 +8,8 @@ const varLong = require('./parsers/varLong');
 const unsignedByte = require('./parsers/unsignedByte');
 const unsignedShort = require('./parsers/unsignedShort');
 const string = require('./parsers/string');
+const dataTypes = require('./datatypes.json');
+const parseWithSchema = require('./utils/parseWithSchema');
 
 module.exports = {
     boolean,
@@ -19,5 +21,7 @@ module.exports = {
     varLong,
     unsignedByte,
     unsignedShort,
-    string
+    string,
+    dataTypes,
+    parseWithSchema
 }

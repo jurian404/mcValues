@@ -1,5 +1,5 @@
 const int = require('./subParser/numbers');
-const McValue = require("./mcValue");
+const McValue = require("../utils/mcValue");
 
 class UnsignedByte extends McValue {
     constructor(value) {

@@ -1,5 +1,5 @@
 const calcOffset = require("../utils/offset");
-const McValue = require("./mcValue");
+const McValue = require("../utils/mcValue");
 
 class VarLong extends McValue {
     constructor(value, usedBytes) {
@@ -11,7 +11,7 @@ function read(buffer, offset = 0) {
     offset = calcOffset(offset, buffer.length);
     const part = getParts(buffer, offset);
     const int = createIntegerFromParts(part);
-    return new VarLong(int, part.length);
+    return new VarLong(int, part.isNegative === undefined ? part.byteBlocks.length : part.byteBlocks.length + 1);
 }
 
 function write(value) {
@@ -54,7 +54,7 @@ function getParts(buffer, offset){
         if (!(chunk & 0b10000000)){
             return {
                 byteBlocks: byteBlocks,
-                isNegative: false
+                isNegative: undefined
             };
         }
     }

@@ -49,6 +49,12 @@ describe("boolean", () => {
         }
     });
 
+    it("read usedBytes", () => {
+        for (const [buffer, expected] of readExamples) {
+            expect(mcValue.boolean.read(buffer).usedBytes).toBe(1);
+        }
+    });
+
     it("reads values with remaining bytes", () => {
         for (const [buffer, expected] of readExamplesWithRemainingBytes) {
             expect(mcValue.boolean.read(buffer).value).toBe(expected);

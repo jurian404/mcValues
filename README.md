@@ -26,7 +26,7 @@ The module currently supports the following Minecraft data types:
 
 ## Usage
 
-### Basic Syntax
+### Basic Syntax for single data type
 To use the module, import it into your project:
 ```javascript
 const mcValues = require('mcvalues');
@@ -47,6 +47,7 @@ const varIntValue = mcValues.varInt.read(buffer);
 #### Offset
 The read method also accepts an optional second argument specifying the offset in the buffer from which to start reading.
 If no offset is provided, reading starts from the beginning of the buffer.
+If a negative offset is provided, it will be treated as an offset from the end of the buffer (the offset refers to the first byte used for parsing, not the last byte).
 ```javascript
 const buffer = Buffer.from([0x01, 0x02, 0x03]); // Example buffer
 const varIntValue = mcValues.varInt.read(buffer, 1); // Start reading from the second byte
@@ -94,6 +95,34 @@ const varIntBuffer = mcValues.varInt.write(123); // Convert the number 123 to a 
 The `write` method will return a Buffer containing the bytes that represent the given JavaScript value in the Minecraft data format.
 The length of the buffer will depend on the value being converted and the data type being used.
 
+
+### Basic Syntax for multiple data types
+If you want to parse multiple values behind each other in the same buffer, you can use the `parseWithSchema` method of the `mcValues` object.
+The `parseWithSchema` method takes a Buffer and an array of data types as arguments and returns an array of parsed values.
+To select the data types, use the datatypes from the `mcValues.dataTypes` enum:
+```javascript
+const buffer = Buffer.from([0x01, 0x02, 0x03]); // Example buffer
+const parsedSchema = mcValues.parseWithSchema(buffer, [
+    mcValues.dataTypes.BOOLEAN,
+    mcValues.dataTypes.BYTE,
+    mcValues.dataTypes.VAR_INT,
+]);
+console.log(parsedSchema.value); // [true, 2, 3]
+console.log(parsedSchema.usedBytes); // 3
+```
+
+You can also specify an offset from which to start parsing the buffer by providing a third argument to the `parseWithSchema` method:
+```javascript
+const buffer = Buffer.from([0x00, 0x01, 0x02, 0x03]); // Example buffer
+const parsedSchema = mcValues.parseWithSchema(buffer, [
+    mcValues.dataTypes.BOOLEAN,
+    mcValues.dataTypes.BYTE,
+    mcValues.dataTypes.VAR_INT,
+], 1); // Start parsing from the second byte
+console.log(parsedSchema.value); // [true, 2, 3]
+console.log(parsedSchema.usedBytes); // 3
+```
+All the values parsed with the `parseWithSchema` method will be returned as an array in the `value` property of the returned object, and the total number of bytes used to parse all the values will be returned in the `usedBytes` property.
 
 ## Data Types
 
