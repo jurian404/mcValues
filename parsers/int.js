@@ -1,5 +1,6 @@
 const int = require('./subParser/numbers');
 const McValue = require("../utils/mcValue");
+const Parser = require("../utils/parser");
 
 class Int extends McValue {
     constructor(value) {
@@ -7,15 +8,19 @@ class Int extends McValue {
     }
 }
 
-function read(buffer, offset = 0){
-    return new Int(int.read(buffer, 4, offset));
+class IntParser extends Parser {
+    constructor() {
+        super();
+        throw new Error("This is a static class");
+    }
+
+    static read(buffer, offset = 0) {
+        return new Int(int.read(buffer, 4, offset));
+    }
+
+    static write(value) {
+        return int.write(value, 4);
+    }
 }
 
-function write(value) {
-    return int.write(value, 4);
-}
-
-module.exports = {
-    read,
-    write
-}
+module.exports = IntParser

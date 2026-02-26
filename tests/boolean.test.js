@@ -46,6 +46,7 @@ describe("boolean", () => {
     it("reads values", () => {
         for (const [buffer, expected] of readExamples) {
             expect(mcValue.boolean.read(buffer).value).toBe(expected);
+            expect(mcValue.read(buffer, mcValue.boolean).value).toBe(expected);
         }
     });
 
@@ -58,6 +59,7 @@ describe("boolean", () => {
     it("reads values with remaining bytes", () => {
         for (const [buffer, expected] of readExamplesWithRemainingBytes) {
             expect(mcValue.boolean.read(buffer).value).toBe(expected);
+            expect(mcValue.read(buffer, mcValue.boolean).value).toBe(expected);
         }
     });
 
@@ -70,12 +72,14 @@ describe("boolean", () => {
     it("reads values with negative offset", () => {
         for (const [buffer, offset, expected] of readExamplesWithNegativeOffset) {
             expect(mcValue.boolean.read(buffer, offset).value).toBe(expected);
+            expect(mcValue.read(buffer, mcValue.boolean, offset).value).toBe(expected);
         }
     });
 
     it("throws when buffer is too short", () => {
         for (const [buffer, offset] of shortBufferExamples) {
             expect(() => mcValue.boolean.read(buffer, offset)).toThrow("Boolean ran out of range");
+            expect(() => mcValue.read(buffer, mcValue.boolean, offset)).toThrow("Boolean ran out of range");
         }
     });
 
@@ -88,6 +92,7 @@ describe("boolean", () => {
     it("writes values", () => {
         for (const [value, expected] of writeExamples) {
             expect(mcValue.boolean.write(value)).toStrictEqual(expected);
+            expect(mcValue.write(value, mcValue.boolean)).toStrictEqual(expected);
         }
     });
 });

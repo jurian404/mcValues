@@ -1,4 +1,5 @@
 const mcValue = require("../index");
+const {unsignedByte} = require("../index");
 
 describe("unsignedByte", () => {
     const readExamples = [
@@ -43,6 +44,7 @@ describe("unsignedByte", () => {
     it("reads values", () => {
         for (const [buffer, expected] of readExamples) {
             expect(mcValue.unsignedByte.read(buffer).value).toBe(expected);
+            expect(mcValue.read(buffer, mcValue.unsignedByte).value).toBe(expected);
         }
     });
 
@@ -61,6 +63,7 @@ describe("unsignedByte", () => {
     it("reads values with offset", () => {
         for (const [buffer, offset, expected] of readExamplesWithOffset) {
             expect(mcValue.unsignedByte.read(buffer, offset).value).toBe(expected);
+            expect(mcValue.read(buffer, mcValue.unsignedByte, offset).value).toBe(expected);
         }
     });
 
@@ -73,18 +76,21 @@ describe("unsignedByte", () => {
     it("throws when buffer is too short", () => {
         for (const buffer of shortBufferExamples) {
             expect(() => mcValue.unsignedByte.read(buffer)).toThrow("Ran out of buffer");
+            expect(() => mcValue.read(buffer, mcValue.unsignedByte)).toThrow("Ran out of buffer");
         }
     });
 
     it("writes values", () => {
         for (const [expected, number] of readExamples) {
             expect(mcValue.unsignedByte.write(number)).toStrictEqual(expected);
+            expect(mcValue.write(number, mcValue.unsignedByte)).toStrictEqual(expected);
         }
     });
 
     it("throws when value is out of range", () => {
         for (const number of writeOutOfRangeExamples) {
             expect(() => mcValue.unsignedByte.write(number)).toThrow("Value is out of range: " + number);
+            expect(() => mcValue.write(number, mcValue.unsignedByte)).toThrow("Value is out of range: " + number);
         }
     });
 });

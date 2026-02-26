@@ -1,4 +1,5 @@
 const mcValue = require("../index");
+const {string} = require("../index");
 
 describe("string", () => {
 
@@ -63,6 +64,7 @@ describe("string", () => {
     it("read usedBytes", () => {
         for (const [buffer, expected, used] of readExamples) {
             expect(mcValue.string.read(buffer).usedBytes).toBe(used);
+            expect(mcValue.read(buffer, mcValue.string).value).toBe(expected);
         }
     });
 
@@ -75,6 +77,7 @@ describe("string", () => {
     it("reads values with offset", () => {
         for (const [buffer, offset, expected] of readExamplesWithOffset) {
             expect(mcValue.string.read(buffer, offset).value).toBe(expected);
+            expect(mcValue.read(buffer, mcValue.string, offset).value).toBe(expected);
         }
     });
 
@@ -87,6 +90,7 @@ describe("string", () => {
     it("throws when buffer is too short", () => {
         for (const buffer of shortBufferExamples) {
             expect(() => mcValue.string.read(buffer)).toThrow("String ran out of the buffer");
+            expect(() => mcValue.read(buffer, mcValue.string)).toThrow("String ran out of the buffer");
         }
     });
 
@@ -105,14 +109,15 @@ describe("string", () => {
     it("writes values", () => {
         for (const [value, expected] of writeExamples) {
             expect(mcValue.string.write(value)).toStrictEqual(expected);
+            expect(mcValue.write(value, mcValue.string)).toStrictEqual(expected);
         }
     }); 
 
     it("throws when value exceeds maximum length", () => {
         const longString = "a".repeat(40000);
 
-        expect(() => mcValue.string.write(longString))
-            .toThrow("String is too long");
+        expect(() => mcValue.string.write(longString)).toThrow("String is too long");
+        expect(() => mcValue.write(longString, mcValue.string)).toThrow("String is too long");
     });
 
 });

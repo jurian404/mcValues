@@ -49,6 +49,7 @@ describe("varInt", () => {
     it("reads values", () => {
         for (const [buffer, expected, used] of readExamples) {
             expect(mcValue.varInt.read(buffer).value).toBe(expected);
+            expect(mcValue.read(buffer, mcValue.varInt).value).toBe(expected);
         }
     });
 
@@ -67,6 +68,7 @@ describe("varInt", () => {
     it("reads values with offset", () => {
         for (const [buffer, offset, expected] of readExamplesWithOffset) {
             expect(mcValue.varInt.read(buffer, offset).value).toBe(expected);
+            expect(mcValue.read(buffer, mcValue.varInt, offset).value).toBe(expected);
         }
     });
 
@@ -87,6 +89,7 @@ describe("varInt", () => {
 
         for (const buffer of tests) {
             expect(() => mcValue.varInt.read(buffer)).toThrow("Variable Integer ran out of the buffer");
+            expect(() => mcValue.read(buffer, mcValue.varInt)).toThrow("Variable Integer ran out of the buffer");
         }
     });
 
@@ -105,6 +108,7 @@ describe("varInt", () => {
     it("writes values", () => {
         for (const [expected, number] of readExamples) {
             expect(mcValue.varInt.write(number)).toStrictEqual(expected);
+            expect(mcValue.write(number, mcValue.varInt)).toStrictEqual(expected);
         }
     });
 
@@ -116,6 +120,7 @@ describe("varInt", () => {
 
         for (const number of tests) {
             expect(() => mcValue.varInt.write(number)).toThrow(`Value is out of range for VarLong: ${number}`);
+            expect(() => mcValue.write(number, mcValue.varInt)).toThrow(`Value is out of range for VarLong: ${number}`);
         }
     });
 

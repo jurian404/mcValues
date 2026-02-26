@@ -20,21 +20,19 @@ describe("parseWithSchema", () => {
         ]);
 
         const schema = [
-            mcValue.dataTypes.BOOLEAN,
-            mcValue.dataTypes.BYTE,
-            mcValue.dataTypes.UNSIGNED_BYTE,
-            mcValue.dataTypes.SHORT,
-            mcValue.dataTypes.UNSIGNED_SHORT,
-            mcValue.dataTypes.INT,
-            mcValue.dataTypes.LONG,
-            mcValue.dataTypes.VAR_INT,
-            mcValue.dataTypes.VAR_LONG,
-            mcValue.dataTypes.STRING
+            mcValue.boolean,
+            mcValue.byte,
+            mcValue.unsignedByte,
+            mcValue.short,
+            mcValue.unsignedShort,
+            mcValue.int,
+            mcValue.long,
+            mcValue.varInt,
+            mcValue.varLong,
+            mcValue.string
         ];
 
-        const result = mcValue.parseWithSchema(buffer, schema);
-
-        expect(result.value).toStrictEqual([
+        const values = [
             true,       // BOOLEAN
             127,        // BYTE
             255,        // UNSIGNED_BYTE
@@ -45,9 +43,10 @@ describe("parseWithSchema", () => {
             6,          // VAR_INT
             7n,         // VAR_LONG
             "hey"       // STRING
-        ]);
+        ];
 
-        // Gesamtlänge aller Bytes
+        const result = mcValue.read(buffer, schema);
+        expect(result.value).toStrictEqual(values);
         expect(result.usedBytes).toBe(25);
     });
 
@@ -60,21 +59,22 @@ describe("parseWithSchema", () => {
         ]);
 
         const schema = [
-            mcValue.dataTypes.BOOLEAN,
-            mcValue.dataTypes.BYTE,
-            mcValue.dataTypes.SHORT,
-            mcValue.dataTypes.INT
+            mcValue.boolean,
+            mcValue.byte,
+            mcValue.short,
+            mcValue.int
         ];
 
-        const result = mcValue.parseWithSchema(buffer, schema);
-
-        expect(result.value).toStrictEqual([
+        const values = [
             true,
             127,
             2,
             5
-        ]);
+        ];
 
+        const result = mcValue.read(buffer, schema);
+
+        expect(result.value).toStrictEqual(values);
         expect(result.usedBytes).toBe(1 + 1 + 2 + 4);
     });
 
@@ -87,13 +87,15 @@ describe("parseWithSchema", () => {
         ]);
 
         const schema = [
-            mcValue.dataTypes.SHORT,
-            mcValue.dataTypes.INT
+            mcValue.short,
+            mcValue.int
         ];
 
-        const result = mcValue.parseWithSchema(buffer, schema, 1);
+        const values = [1, 2]
 
-        expect(result.value).toStrictEqual([1, 2]);
+        const result = mcValue.read(buffer, schema, 1);
+
+        expect(result.value).toStrictEqual(values);
         expect(result.usedBytes).toBe(2 + 4);
     });
 
@@ -106,33 +108,34 @@ describe("parseWithSchema", () => {
         ]);
 
         const schema = [
-            mcValue.dataTypes.SHORT,
-            mcValue.dataTypes.INT
+            mcValue.short,
+            mcValue.int
         ];
 
-        // -6 → beginnt bei SHORT
-        const result = mcValue.parseWithSchema(buffer, schema, -6);
+        const values = [3, 4]
 
-        expect(result.value).toStrictEqual([3, 4]);
+        const result = mcValue.read(buffer, schema, -6);
+
+        expect(result.value).toStrictEqual(values);
         expect(result.usedBytes).toBe(2 + 4);
     });
 
 
     it("parses STRING correctly", () => {
-        // STRING parser nutzt vermutlich VarInt-Länge + UTF-8
-        // Beispiel: Länge 3, "abc"
         const buffer = Buffer.from([
             0x03,                   // VarInt length = 3
             0x61, 0x62, 0x63        // "abc"
         ]);
 
         const schema = [
-            mcValue.dataTypes.STRING
+            mcValue.string
         ];
 
-        const result = mcValue.parseWithSchema(buffer, schema);
+        const values = ["abc"]
 
-        expect(result.value).toStrictEqual(["abc"]);
+        const result = mcValue.read(buffer, schema);
+
+        expect(result.value).toStrictEqual(values);
         expect(result.usedBytes).toBe(1 + 3);
     });
 
@@ -142,7 +145,7 @@ describe("parseWithSchema", () => {
 
         const schema = ["UNKNOWN_TYPE"];
 
-        expect(() => mcValue.parseWithSchema(buffer, schema))
+        expect(() => mcValue.read(buffer, schema))
             .toThrow("Given data type is not supported.");
     });
 });

@@ -44,6 +44,7 @@ describe("short", () => {
     it("reads values", () => {
         for (const [buffer, expected] of readExamples) {
             expect(mcValue.short.read(buffer).value).toBe(expected);
+            expect(mcValue.read(buffer, mcValue.short).value).toBe(expected);
         }
     });
 
@@ -62,6 +63,7 @@ describe("short", () => {
     it("reads values with offset", () => {
         for (const [buffer, offset, expected] of readExamplesWithOffset) {
             expect(mcValue.short.read(buffer, offset).value).toBe(expected);
+            expect(mcValue.read(buffer, mcValue.short, offset).value).toBe(expected);
         }
     });
 
@@ -74,18 +76,21 @@ describe("short", () => {
     it("throws when buffer is too short", () => {
         for (const buffer of shortBufferExamples) {
             expect(() => mcValue.short.read(buffer)).toThrow("Ran out of buffer");
+            expect(() => mcValue.read(buffer, mcValue.short)).toThrow("Ran out of buffer");
         }
     });
 
     it("writes values", () => {
         for (const [expected, number] of readExamples) {
             expect(mcValue.short.write(number)).toStrictEqual(expected);
+            expect(mcValue.write(number, mcValue.short)).toStrictEqual(expected);
         }
     });
 
     it("throws when value is out of range", () => {
         for (const number of writeOutOfRangeExamples) {
             expect(() => mcValue.short.write(number)).toThrow("Value is out of range: " + number);
+            expect(() => mcValue.write(number, mcValue.short)).toThrow("Value is out of range: " + number);
         }
     });
 });

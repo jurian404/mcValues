@@ -1,5 +1,6 @@
 const calcOffset = require("../utils/offset");
 const McValue = require("../utils/mcValue");
+const Parser = require("../utils/parser");
 
 class VarInt extends McValue {
     constructor(value, usedBytes) {
@@ -7,39 +8,46 @@ class VarInt extends McValue {
     }
 }
 
-function read(buffer, offset = 0) {
-    offset = calcOffset(offset, buffer.length);
-    const part = getParts(buffer, offset);
-    const int = createIntegerFromParts(part);
-    return new VarInt(int, part.length);
-}
+class VarIntParser extends Parser {
+    constructor() {
+        super();
+        throw new Error("This is a static class");
+    }
 
-function write(value){
-    if(value < -2147483648 || value > 2147483647){
-        throw new Error("Value is out of range for VarLong: " + value);
+    static read(buffer, offset = 0) {
+        offset = calcOffset(offset, buffer.length);
+        const part = getParts(buffer, offset);
+        const int = createIntegerFromParts(part);
+        return new VarInt(int, part.length);
     }
-    let isNegative = false;
-    const blocks = []
-    if (value < 0){
-        isNegative = true;
-        value = 2147483648 + value;
-    }
-    do {
-        const block = value & 0b1111111;
-        blocks.push(block);
-        value >>= 7;
-    }
-    while (value > 0);
-    if (isNegative) {
-        while (blocks.length < 5){
-            blocks.push(0x00);
+
+    static write(value) {
+        if(value < -2147483648 || value > 2147483647){
+            throw new Error("Value is out of range for VarLong: " + value);
         }
-        blocks[4] = blocks[4] | 0x08;
+        let isNegative = false;
+        const blocks = []
+        if (value < 0){
+            isNegative = true;
+            value = 2147483648 + value;
+        }
+        do {
+            const block = value & 0b1111111;
+            blocks.push(block);
+            value >>= 7;
+        }
+        while (value > 0);
+        if (isNegative) {
+            while (blocks.length < 5){
+                blocks.push(0x00);
+            }
+            blocks[4] = blocks[4] | 0x08;
+        }
+        for (let i = 0; i < blocks.length - 1; i++) {
+            blocks[i] = blocks[i] | 0b10000000;
+        }
+        return Buffer.from(blocks);
     }
-    for (let i = 0; i < blocks.length - 1; i++) {
-        blocks[i] = blocks[i] | 0b10000000;
-    }
-    return Buffer.from(blocks);
 }
 
 function getParts(buffer, offset){
@@ -67,7 +75,4 @@ function createIntegerFromParts(byteBlocks){
 }
 
 
-module.exports = {
-    read,
-    write
-}
+module.exports = VarIntParser
