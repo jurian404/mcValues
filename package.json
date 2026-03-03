@@ -1,6 +1,6 @@
 {
   "name": "mcvalues",
-  "version": "1.6.0",
+  "version": "2.1.0",
   "description": "",
   "keywords": [
     "mc",
@@ -14,7 +14,9 @@
     "Short",
     "Int",
     "Long",
-    "String"
+    "String",
+    "Float",
+    "Double"
   ],
   "homepage": "https://github.com/jurian404/mcValues#readme",
   "bugs": {

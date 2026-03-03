@@ -15,6 +15,9 @@ class VarIntParser extends Parser {
     }
 
     static read(buffer, offset = 0) {
+        if (!Buffer.isBuffer(buffer)) {
+            throw new Error("Provided data is not a buffer");
+        }
         offset = calcOffset(offset, buffer.length);
         const part = getParts(buffer, offset);
         const int = createIntegerFromParts(part);

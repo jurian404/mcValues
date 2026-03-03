@@ -1,7 +1,6 @@
 const calcOffset = require("../utils/offset");
 const McValue = require("../utils/mcValue");
 const Parser = require("../utils/parser");
-const int = require("./subParser/numbers");
 
 class VarLong extends McValue {
     constructor(value, usedBytes) {
@@ -16,6 +15,9 @@ class VarLongParser extends Parser {
     }
 
     static read(buffer, offset = 0) {
+        if (!Buffer.isBuffer(buffer)) {
+            throw new Error("Provided data is not a buffer");
+        }
         offset = calcOffset(offset, buffer.length);
         const part = getParts(buffer, offset);
         const int = createIntegerFromParts(part);

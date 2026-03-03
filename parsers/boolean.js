@@ -15,6 +15,9 @@ class BooleanParser extends Parser {
     }
 
     static read(buffer, offset = 0) {
+        if (!Buffer.isBuffer(buffer)) {
+            throw new Error("Provided data is not a buffer");
+        }
         offset = calcOffset(offset, buffer.length);
         if (buffer.length - 1 < offset) {
             throw new Error("Boolean ran out of range");

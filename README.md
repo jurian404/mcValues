@@ -10,7 +10,7 @@ More information about this data can be found in this [Minecraft Wiki article](h
 - [Writing Data](#write-minecraft-binary-data)
 - [McValues Class & Schemas](#mcvalues-class)
 - [Offset](#offset)
-- [Supported Data Types](#datatypes)
+- [Data Type Documentation](#datatypes)
 - [Disclaimer](#disclaimer)
 
 
@@ -37,12 +37,14 @@ The module currently supports the following Minecraft data types:
 - [Long](#long)
 - [VarInt](#varint)
 - [VarLong](#varlong)
+- [Float](#float)
+- [Double](#double)
 
 > More data types will be added in the future, so stay tuned for updates!
 
 ## Read minecraft binary data
 You have two options for reading Minecraft binary data:
-1. Use a datatype-specific read function.
+1. Use a datatype-specific read method.
 2. Use the generic `read` function.
 
 ### 1. Datatype-specific read method
@@ -327,6 +329,22 @@ Here's a list of the currently supported data types and their corresponding info
 - **Javascript Value**: A number between -9 223 372 036 854 775 808 and 9 223 372 036 854 775 807
 - **Parser/Writer Class**: `mcValues.varLong`
 - **Data Type Class**: `VarLong`
+    - This class has no additional properties
+
+### Float
+- **Description**: Represents a 32-bit floating-point value.
+- **Buffer Size**: 4 bytes
+- **Javascript Value**: A number that can be represented as a 32-bit float
+- **Parser/Writer Class**: `mcValues.float`
+- **Data Type Class**: `Float`
+    - This class has no additional properties
+
+### Double
+- **Description**: Represents a 64-bit floating-point value.
+- **Buffer Size**: 8 bytes
+- **Javascript Value**: A number that can be represented as a 64-bit float
+- **Parser/Writer Class**: `mcValues.double`
+- **Data Type Class**: `Double`
     - This class has no additional properties
 
 ## Disclaimer

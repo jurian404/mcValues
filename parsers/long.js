@@ -1,4 +1,4 @@
-const int = require('./subParser/bigInt');
+const numbers = require('./subParser/bigInt');
 const McValue = require("../utils/mcValue");
 const Parser = require("../utils/parser");
 
@@ -15,11 +15,11 @@ class LongParser extends Parser {
     }
 
     static read(buffer, offset = 0) {
-        return new Long(int.read(buffer, 8, offset));
+        return new Long(numbers.read(buffer, 8, offset));
     }
 
     static write(value) {
-        return int.write(value, 8);
+        return numbers.write(value, 8);
     }
 }
 

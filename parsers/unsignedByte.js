@@ -1,4 +1,4 @@
-const int = require('./subParser/numbers');
+const numbers = require('./subParser/numbers');
 const McValue = require("../utils/mcValue");
 const Parser = require("../utils/parser");
 
@@ -15,11 +15,11 @@ class UnsignedByteParser extends Parser {
     }
 
     static read(buffer, offset = 0) {
-        return new UnsignedByte(int.unsignedRead(buffer, 1, offset));
+        return new UnsignedByte(numbers.unsignedRead(buffer, 1, offset));
     }
 
     static write(value) {
-        return int.unsignedWrite(value, 1);
+        return numbers.unsignedWrite(value, 1);
     }
 }
 

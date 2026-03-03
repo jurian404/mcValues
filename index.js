@@ -8,6 +8,8 @@ const varLong = require('./parsers/varLong');
 const unsignedByte = require('./parsers/unsignedByte');
 const unsignedShort = require('./parsers/unsignedShort');
 const string = require('./parsers/string');
+const float = require('./parsers/float');
+const double = require('./parsers/double');
 const read = require('./utils/read');
 const write = require('./utils/write');
 
@@ -21,6 +23,8 @@ module.exports = {
     varLong,
     unsignedByte,
     unsignedShort,
+    float,
+    double,
     string,
     read,
     write

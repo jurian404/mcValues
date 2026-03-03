@@ -1,6 +1,9 @@
 const calcOffset = require("../../utils/offset");
 
-function read(buffer, length, offset){
+function read(buffer, length, offset, isUnsigned = false) {
+    if (!Buffer.isBuffer(buffer)) {
+        throw new Error("Provided data is not a buffer");
+    }
     offset = calcOffset(offset, buffer.length);
     if (buffer.length < length + offset){
         throw new Error("Ran out of buffer");
@@ -9,6 +12,9 @@ function read(buffer, length, offset){
     for (let i = 0; i < length; i++) {
         number <<= 8;
         number |= buffer[offset + i];
+    }
+    if (isUnsigned) {
+        return number;
     }
     //check negative
     if (number >> (8 * length - 1)){
@@ -39,16 +45,7 @@ function write(number, length) {
 }
 
 function unsignedRead(buffer, length, offset){
-    offset = calcOffset(offset, buffer.length);
-    if (buffer.length < length + offset){
-        throw new Error("Ran out of buffer");
-    }
-    let number = 0;
-    for (let i = 0; i < length; i++) {
-        number <<= 8;
-        number |= buffer[offset + i];
-    }
-    return number;
+    return read(buffer, length, offset, true);
 }
 
 function unsignedWrite(number, length) {
